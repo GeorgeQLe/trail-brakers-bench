@@ -5,212 +5,416 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Trail Brakers Bench</title>
   <meta name="description" content="One prompt, multiple frontier models: voxel F1 circuit demos built with Three.js by Grok 4.5 and GPT-5.6, side by side." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #0b0d12;
-      --surface: #131722;
-      --surface-2: #1a2030;
-      --line: #262e42;
-      --text: #e8ecf4;
-      --muted: #96a0b5;
-      --accent: #ff4d5a;
-      --accent-2: #4dc9ff;
-      --radius: 14px;
+      --asphalt: #09090b;
+      --asphalt-2: #101014;
+      --panel: #141419;
+      --line: #26262e;
+      --text: #f2f2f5;
+      --muted: #8f909c;
+      --red: #e10600;          /* F1 red */
+      --purple: #b98aff;       /* fastest-sector purple */
+      --green: #4ade80;        /* personal-best green */
+      --yellow: #fbbf24;       /* race-control yellow */
+      --display: "Chakra Petch", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { color-scheme: dark; }
+    html { color-scheme: dark; scroll-behavior: smooth; }
     body {
-      background: var(--bg);
+      background: var(--asphalt);
       color: var(--text);
-      font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-family: var(--display);
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
     a { color: inherit; }
-    .wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
-    /* Hero */
-    header {
-      padding: 88px 0 64px;
-      background:
-        radial-gradient(60% 80% at 20% 0%, rgba(255, 77, 90, .14), transparent 60%),
-        radial-gradient(50% 70% at 85% 10%, rgba(77, 201, 255, .12), transparent 60%);
+    /* ── ticker ─────────────────────────────────────── */
+    .ticker {
       border-bottom: 1px solid var(--line);
-    }
-    .kicker {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+      background: var(--asphalt-2);
+      overflow: hidden;
+      white-space: nowrap;
+      font: 500 12px/1 var(--mono);
+      letter-spacing: .14em;
+      text-transform: uppercase;
       color: var(--muted);
-      border: 1px solid var(--line); border-radius: 999px;
-      padding: 6px 14px; margin-bottom: 24px;
-      background: rgba(255,255,255,.02);
+      user-select: none;
     }
-    .kicker::before {
-      content: ""; width: 8px; height: 8px; border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 10px var(--accent);
+    .ticker__inner {
+      display: inline-block;
+      padding: 10px 0;
+      animation: ticker 32s linear infinite;
+    }
+    .ticker__inner span { margin: 0 18px; }
+    .ticker__inner .dot { color: var(--red); }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── hero ───────────────────────────────────────── */
+    .hero {
+      position: relative;
+      padding: 84px 0 72px;
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(70% 90% at 15% 0%, rgba(225, 6, 0, .10), transparent 55%),
+        repeating-linear-gradient(0deg, transparent 0 47px, rgba(255,255,255,.025) 47px 48px),
+        repeating-linear-gradient(90deg, transparent 0 47px, rgba(255,255,255,.025) 47px 48px);
+    }
+    .hero .wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+      gap: 48px;
+      align-items: center;
+    }
+    @media (max-width: 840px) { .hero .wrap { grid-template-columns: 1fr; } }
+
+    .lights { display: flex; gap: 10px; margin-bottom: 26px; }
+    .lights i {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: #1d1d23; border: 1px solid var(--line);
+      animation: 6s steps(1) infinite;
+    }
+    /* staggered on, then lights out together at 78% of the cycle */
+    .lights i:nth-child(1) { animation-name: light-1; }
+    .lights i:nth-child(2) { animation-name: light-2; }
+    .lights i:nth-child(3) { animation-name: light-3; }
+    .lights i:nth-child(4) { animation-name: light-4; }
+    .lights i:nth-child(5) { animation-name: light-5; }
+    @keyframes light-1 { 0%,9.999% {background:#1d1d23;box-shadow:none} 10%,77.999% {background:var(--red);box-shadow:0 0 14px rgba(225,6,0,.8)} 78%,100% {background:#1d1d23;box-shadow:none} }
+    @keyframes light-2 { 0%,21.999% {background:#1d1d23;box-shadow:none} 22%,77.999% {background:var(--red);box-shadow:0 0 14px rgba(225,6,0,.8)} 78%,100% {background:#1d1d23;box-shadow:none} }
+    @keyframes light-3 { 0%,33.999% {background:#1d1d23;box-shadow:none} 34%,77.999% {background:var(--red);box-shadow:0 0 14px rgba(225,6,0,.8)} 78%,100% {background:#1d1d23;box-shadow:none} }
+    @keyframes light-4 { 0%,45.999% {background:#1d1d23;box-shadow:none} 46%,77.999% {background:var(--red);box-shadow:0 0 14px rgba(225,6,0,.8)} 78%,100% {background:#1d1d23;box-shadow:none} }
+    @keyframes light-5 { 0%,57.999% {background:#1d1d23;box-shadow:none} 58%,77.999% {background:var(--red);box-shadow:0 0 14px rgba(225,6,0,.8)} 78%,100% {background:#1d1d23;box-shadow:none} }
+
+    .kicker {
+      font: 600 12px/1 var(--mono);
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 16px;
     }
     h1 {
-      font-size: clamp(2.2rem, 5.5vw, 3.6rem);
-      line-height: 1.08; letter-spacing: -0.02em; font-weight: 800;
-      margin-bottom: 18px;
+      font-size: clamp(2.6rem, 7vw, 4.6rem);
+      font-weight: 700;
+      line-height: .95;
+      letter-spacing: -.01em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
     }
-    h1 .accent { color: var(--accent); }
-    .lede { max-width: 640px; color: var(--muted); font-size: 1.12rem; }
-    .lede strong { color: var(--text); font-weight: 600; }
-
-    /* Sections */
-    section { padding: 56px 0 8px; }
-    .model-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px; margin-bottom: 8px; }
-    .model-head h2 { font-size: 1.6rem; letter-spacing: -0.01em; }
-    .chip {
-      font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-      padding: 4px 10px; border-radius: 999px;
+    h1 .ghost {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(242,242,245,.35);
     }
-    .chip.grok { background: rgba(255, 77, 90, .14); color: #ff8b94; border: 1px solid rgba(255, 77, 90, .35); }
-    .chip.gpt  { background: rgba(77, 201, 255, .12); color: #8fdcff; border: 1px solid rgba(77, 201, 255, .35); }
-    .model-sub { color: var(--muted); margin-bottom: 28px; max-width: 700px; }
-
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 18px; }
-    .card {
-      display: flex; flex-direction: column; gap: 10px;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 22px;
-      text-decoration: none;
-      transition: transform .15s ease, border-color .15s ease, background .15s ease;
-    }
-    .card:hover { transform: translateY(-3px); border-color: #3a4560; background: var(--surface-2); }
-    .card h3 { font-size: 1.08rem; display: flex; align-items: center; gap: 8px; }
-    .card p { color: var(--muted); font-size: .93rem; flex: 1; }
-    .card .go { color: var(--accent-2); font-size: .9rem; font-weight: 600; }
-    .card .go::after { content: " →"; }
-    .tag {
-      align-self: flex-start;
-      font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-      color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 2px 8px;
-    }
-
-    /* Brief */
-    .brief {
-      margin-top: 64px;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 28px;
-    }
-    .brief h2 { font-size: 1.2rem; margin-bottom: 12px; }
-    .brief blockquote {
-      border-left: 3px solid var(--accent);
-      padding-left: 16px;
+    .lede {
+      max-width: 520px;
       color: var(--muted);
-      font-style: italic;
+      font-size: 1.05rem;
+      margin-top: 20px;
     }
-    .brief .note { margin-top: 14px; color: var(--muted); font-size: .92rem; }
+    .lede strong { color: var(--text); font-weight: 600; }
+    .hero__meta {
+      display: flex; flex-wrap: wrap; gap: 10px 26px;
+      margin-top: 30px;
+      font: 500 12px/1.8 var(--mono);
+      letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+    }
+    .hero__meta b { color: var(--text); font-weight: 600; }
 
+    /* circuit figure */
+    .circuit { position: relative; }
+    .circuit svg { width: 100%; height: auto; display: block; }
+    .circuit .track-base { fill: none; stroke: #232329; stroke-width: 14; stroke-linejoin: round; stroke-linecap: round; }
+    .circuit .track-edge { fill: none; stroke: #35353e; stroke-width: 1.5; stroke-linejoin: round; }
+    .circuit .race-line {
+      fill: none; stroke: var(--red); stroke-width: 2.5;
+      stroke-linejoin: round; stroke-linecap: round;
+      stroke-dasharray: 90 830;
+      animation: lap 7s linear infinite;
+      filter: drop-shadow(0 0 6px rgba(225,6,0,.65));
+    }
+    @keyframes lap { to { stroke-dashoffset: -920; } }
+    .circuit .sf { stroke: var(--text); stroke-width: 3; stroke-dasharray: 3 3; }
+    .circuit figcaption {
+      margin-top: 12px;
+      font: 500 11px/1.6 var(--mono);
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--muted); text-align: right;
+    }
+
+    /* ── kerb divider ───────────────────────────────── */
+    .kerb {
+      height: 10px;
+      background: repeating-linear-gradient(-45deg, var(--red) 0 16px, #fff 16px 32px);
+      opacity: .85;
+    }
+
+    /* ── entries ────────────────────────────────────── */
+    .entry { padding: 64px 0 24px; }
+    .entry__bar {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--accent, var(--red));
+      background: linear-gradient(90deg, rgba(255,255,255,.03), transparent 60%);
+      padding: 16px 20px;
+      margin-bottom: 26px;
+    }
+    .entry__pos {
+      font: 700 1.9rem/1 var(--display);
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--accent, var(--red));
+    }
+    .entry__bar h2 {
+      font-size: 1.5rem; text-transform: uppercase; letter-spacing: .04em;
+      font-weight: 700;
+    }
+    .entry__bar .circuit-tag {
+      font: 600 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase;
+      color: var(--accent, var(--red));
+      border: 1px solid currentColor;
+      padding: 5px 10px;
+    }
+    .entry__note {
+      flex-basis: 100%;
+      color: var(--muted); font-size: .95rem; max-width: 760px;
+    }
+    #grok { --accent: var(--red); }
+    #gpt  { --accent: var(--purple); }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .card {
+      position: relative;
+      display: flex; flex-direction: column; gap: 10px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 20px 20px 18px;
+      text-decoration: none;
+      transition: transform .16s ease, border-color .16s ease;
+      overflow: hidden;
+    }
+    .card::before {
+      content: ""; position: absolute; inset: 0 auto 0 0; width: 3px;
+      background: var(--sector, var(--muted));
+      transition: width .16s ease;
+    }
+    .card:hover { transform: translateY(-3px); border-color: #3c3c46; }
+    .card:hover::before { width: 6px; }
+    .card .tag {
+      font: 600 10px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase;
+      color: var(--sector, var(--muted));
+    }
+    .card h3 { font-size: 1.05rem; font-weight: 600; letter-spacing: .01em; }
+    .card p { color: var(--muted); font-size: .9rem; flex: 1; line-height: 1.55; }
+    .card .go {
+      font: 600 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase;
+      color: var(--text);
+    }
+    .card .go::after { content: "  ▸"; color: var(--sector, var(--red)); }
+    .s-purple { --sector: var(--purple); }
+    .s-green  { --sector: var(--green); }
+    .s-yellow { --sector: var(--yellow); }
+    .s-red    { --sector: var(--red); }
+
+    /* ── race control ───────────────────────────────── */
+    .race-control { margin: 72px 0 0; }
+    .rc-box {
+      border: 1px solid rgba(251,191,36,.5);
+      background: rgba(251,191,36,.04);
+    }
+    .rc-box__head {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--yellow); color: #111;
+      font: 700 12px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase;
+      padding: 10px 16px;
+    }
+    .rc-box__head::before { content: "⚑"; font-size: 14px; }
+    .rc-box__body { padding: 22px 24px; }
+    .rc-box__body blockquote {
+      font: 500 1.02rem/1.7 var(--mono);
+      color: var(--text);
+    }
+    .rc-box__body .note {
+      margin-top: 16px; color: var(--muted); font-size: .9rem;
+    }
+    kbd {
+      font: 600 .8em var(--mono);
+      border: 1px solid var(--line); border-bottom-width: 2px;
+      padding: 1px 6px; border-radius: 4px; background: var(--asphalt-2);
+    }
+
+    /* ── footer ─────────────────────────────────────── */
     footer {
       margin-top: 72px;
       border-top: 1px solid var(--line);
-      padding: 28px 0 48px;
-      color: var(--muted); font-size: .9rem;
-      display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+      padding: 26px 0 46px;
+      color: var(--muted);
+      font: 400 13px/1.8 var(--mono);
     }
-    footer a { color: var(--accent-2); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
+    footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+    footer a { color: var(--text); text-decoration: none; border-bottom: 1px solid var(--line); }
+    footer a:hover { border-color: var(--red); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker__inner, .lights i, .circuit .race-line { animation: none; }
+      .circuit .race-line { stroke-dasharray: none; }
+      .card, .card::before { transition: none; }
+    }
   </style>
 </head>
 <body>
-  <header>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__inner">
+      <span>Trail Brakers Bench</span><span class="dot">●</span>
+      <span>One seed prompt</span><span class="dot">●</span>
+      <span>Two frontier models</span><span class="dot">●</span>
+      <span>Six playable demos</span><span class="dot">●</span>
+      <span>Silverstone</span><span class="dot">●</span>
+      <span>Spa-Francorchamps</span><span class="dot">●</span>
+      <span>Three.js · no external assets</span><span class="dot">●</span>
+      <span>Trail Brakers Bench</span><span class="dot">●</span>
+      <span>One seed prompt</span><span class="dot">●</span>
+      <span>Two frontier models</span><span class="dot">●</span>
+      <span>Six playable demos</span><span class="dot">●</span>
+      <span>Silverstone</span><span class="dot">●</span>
+      <span>Spa-Francorchamps</span><span class="dot">●</span>
+      <span>Three.js · no external assets</span><span class="dot">●</span>
+    </div>
+  </div>
+
+  <header class="hero">
     <div class="wrap">
-      <div class="kicker">Model bench · Three.js · One brief</div>
-      <h1>Trail Brakers <span class="accent">Bench</span></h1>
-      <p class="lede">
-        The same seed prompt — <strong>“a voxel-style F1 car lapping a real Grand Prix circuit in Three.js”</strong> —
-        handed to different frontier models. Every demo below is the model's own work, deployed as built.
-        Compare the one-shot outputs and where each model took it from there.
-      </p>
+      <div>
+        <div class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <p class="kicker">Model bench · Creative coding · Three.js</p>
+        <h1>Trail Brakers<span class="ghost">Bench</span></h1>
+        <p class="lede">
+          The same seed prompt — <strong>“a voxel-style F1 car lapping a real Grand Prix
+          circuit in Three.js”</strong> — handed to different frontier models.
+          Every demo is the model's own work, deployed exactly as built.
+        </p>
+        <div class="hero__meta">
+          <span>Entrants <b>02</b></span>
+          <span>Demos <b>06</b></span>
+          <span>Circuits <b>Silverstone · Spa</b></span>
+          <span>External assets <b>None</b></span>
+        </div>
+      </div>
+
+      <figure class="circuit" aria-hidden="true">
+        <svg viewBox="0 0 400 300">
+          <path class="track-base" id="tb" d="M60,240 L250,240 Q290,240 300,210 L310,180 Q315,160 335,155 Q360,148 355,125 L345,95 Q340,75 315,72 L285,70 Q265,68 255,85 Q245,100 228,95 Q210,90 212,72 Q214,55 195,50 L120,38 Q95,34 85,55 L45,150 Q35,175 48,200 L52,215 Q55,240 60,240 Z" />
+          <path class="track-edge" d="M60,240 L250,240 Q290,240 300,210 L310,180 Q315,160 335,155 Q360,148 355,125 L345,95 Q340,75 315,72 L285,70 Q265,68 255,85 Q245,100 228,95 Q210,90 212,72 Q214,55 195,50 L120,38 Q95,34 85,55 L45,150 Q35,175 48,200 L52,215 Q55,240 60,240 Z" />
+          <path class="race-line" pathLength="920" d="M60,240 L250,240 Q290,240 300,210 L310,180 Q315,160 335,155 Q360,148 355,125 L345,95 Q340,75 315,72 L285,70 Q265,68 255,85 Q245,100 228,95 Q210,90 212,72 Q214,55 195,50 L120,38 Q95,34 85,55 L45,150 Q35,175 48,200 L52,215 Q55,240 60,240 Z" />
+          <line class="sf" x1="120" y1="232" x2="120" y2="248" />
+        </svg>
+        <figcaption>Fig. 01 — the racing line, lapping</figcaption>
+      </figure>
     </div>
   </header>
 
-  <main class="wrap">
-    <section id="grok">
-      <div class="model-head">
-        <h2>Grok 4.5</h2>
-        <span class="chip grok">Silverstone</span>
-      </div>
-      <p class="model-sub">
-        Started from a simplified one-shot track, then digitized the modern Silverstone GP centerline
-        from OpenStreetMap (~5.86 km, Abbey → Club) and shipped two visual styles on the same track data.
-      </p>
-      <div class="grid">
-        <a class="card" href="./demos/grok-4.5/oneshot/">
-          <span class="tag">One-shot</span>
-          <h3>🏁 One-shot Voxel</h3>
-          <p>Exact first-response snapshot from the seed prompt. Simplified track layout, play/pause/restart, orbit controls.</p>
-          <span class="go">Run demo</span>
-        </a>
-        <a class="card" href="./demos/grok-4.5/voxel/">
-          <span class="tag">Iterated</span>
-          <h3>🧱 Voxel Trail Brakers</h3>
-          <p>Instanced box track and car on the OSM-digitized Silverstone centerline, with lap timer and live corner names.</p>
-          <span class="go">Run demo</span>
-        </a>
-        <a class="card" href="./demos/grok-4.5/3d/">
-          <span class="tag">Iterated</span>
-          <h3>🏎️ Trail Brakers 3D</h3>
-          <p>Smooth ribbon-mesh take on the same track data — standard materials and a follow camera (press F).</p>
-          <span class="go">Run demo</span>
-        </a>
-        <a class="card" href="./demos/grok-4.5/">
-          <span class="tag">Showcase</span>
-          <h3>📄 Grok's own landing page</h3>
-          <p>The showcase page Grok built for its entry, including the prompts it was given.</p>
-          <span class="go">View page</span>
-        </a>
-      </div>
-    </section>
-
-    <section id="gpt">
-      <div class="model-head">
-        <h2>GPT-5.6</h2>
-        <span class="chip gpt">Spa · Silverstone</span>
-      </div>
-      <p class="model-sub">
-        Built editorial “voxel diorama” visualizations — deterministic instanced terrain, elevation-aware
-        centerlines, reduced-motion support, and Playwright proof captures — for two circuits.
-      </p>
-      <div class="grid">
-        <a class="card" href="./demos/gpt-5.6/spa/">
-          <span class="tag">Circuit 1</span>
-          <h3>🌲 Spa-Francorchamps</h3>
-          <p>Elevated closed 3D centreline through the Ardennes — forest, runoff, stream, and named sections, with a stable crimson voxel car.</p>
-          <span class="go">Run demo</span>
-        </a>
-        <a class="card" href="./demos/gpt-5.6/silverstone/">
-          <span class="tag">Circuit 2</span>
-          <h3>🇬🇧 Silverstone</h3>
-          <p>The same voxel Grand Prix treatment applied to Silverstone, built against FIA circuit-map and OSM reference geometry.</p>
-          <span class="go">Run demo</span>
-        </a>
+  <main>
+    <section class="entry" id="grok">
+      <div class="wrap">
+        <div class="entry__bar">
+          <span class="entry__pos">01</span>
+          <h2>Grok 4.5</h2>
+          <span class="circuit-tag">Silverstone GP</span>
+          <p class="entry__note">
+            Started from a simplified one-shot track, then digitized the modern Silverstone
+            centerline from OpenStreetMap (~5.86 km, Abbey → Club) and shipped two visual
+            styles on the same track data.
+          </p>
+        </div>
+        <div class="grid">
+          <a class="card s-yellow" href="./demos/grok-4.5/oneshot/">
+            <span class="tag">Lap 1 · One-shot</span>
+            <h3>One-shot Voxel</h3>
+            <p>Exact first-response snapshot from the seed prompt. Simplified track layout, play/pause/restart, orbit controls.</p>
+            <span class="go">Run demo</span>
+          </a>
+          <a class="card s-green" href="./demos/grok-4.5/voxel/">
+            <span class="tag">Iterated</span>
+            <h3>Voxel Trail Brakers</h3>
+            <p>Instanced box track and car on the OSM-digitized centerline, with lap timer and live corner names.</p>
+            <span class="go">Run demo</span>
+          </a>
+          <a class="card s-purple" href="./demos/grok-4.5/3d/">
+            <span class="tag">Iterated</span>
+            <h3>Trail Brakers 3D</h3>
+            <p>Smooth ribbon-mesh take on the same track data — standard materials and a follow camera (press F).</p>
+            <span class="go">Run demo</span>
+          </a>
+          <a class="card s-red" href="./demos/grok-4.5/">
+            <span class="tag">Paddock</span>
+            <h3>Grok's own landing page</h3>
+            <p>The showcase page Grok built for its entry, including the prompts it was given.</p>
+            <span class="go">View page</span>
+          </a>
+        </div>
       </div>
     </section>
 
-    <div class="brief">
-      <h2>The seed prompt</h2>
-      <blockquote>
-        “Generate using three.js a voxel-style scene of an F1 car driving around a 3D representation of
-        [a real Grand Prix circuit] … with play / pause / restart and orbit controls.”
-      </blockquote>
-      <p class="note">
-        Shared controls across entries: <kbd>Space</kbd> play/pause · <kbd>R</kbd> restart · drag to orbit · scroll to zoom.
-        No external models or textures — every track, car, and tree is generated in code.
-      </p>
-    </div>
+    <div class="kerb" role="presentation"></div>
+
+    <section class="entry" id="gpt">
+      <div class="wrap">
+        <div class="entry__bar">
+          <span class="entry__pos">02</span>
+          <h2>GPT-5.6</h2>
+          <span class="circuit-tag">Spa · Silverstone</span>
+          <p class="entry__note">
+            Built editorial “voxel diorama” visualizations — deterministic instanced terrain,
+            elevation-aware centerlines, reduced-motion support, and Playwright proof captures —
+            for two circuits.
+          </p>
+        </div>
+        <div class="grid">
+          <a class="card s-purple" href="./demos/gpt-5.6/spa/">
+            <span class="tag">Circuit 1</span>
+            <h3>Spa-Francorchamps</h3>
+            <p>Elevated closed 3D centreline through the Ardennes — forest, runoff, stream, and named sections, with a stable crimson voxel car.</p>
+            <span class="go">Run demo</span>
+          </a>
+          <a class="card s-green" href="./demos/gpt-5.6/silverstone/">
+            <span class="tag">Circuit 2</span>
+            <h3>Silverstone</h3>
+            <p>The same voxel Grand Prix treatment applied to Silverstone, built against FIA circuit-map and OSM reference geometry.</p>
+            <span class="go">Run demo</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="race-control wrap">
+      <div class="rc-box">
+        <div class="rc-box__head">Race control · Seed prompt delivered to all entrants</div>
+        <div class="rc-box__body">
+          <blockquote>
+            “Generate using three.js a voxel-style scene of an F1 car driving around a 3D
+            representation of [a real Grand Prix circuit] … with play / pause / restart and
+            orbit controls.”
+          </blockquote>
+          <p class="note">
+            Shared controls across entries: <kbd>Space</kbd> play/pause · <kbd>R</kbd> restart ·
+            drag to orbit · scroll to zoom. No external models or textures — every track, car,
+            and tree is generated in code.
+          </p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer>
-    <div class="wrap" style="display:flex; flex-wrap:wrap; gap:8px 24px; justify-content:space-between; padding:0;">
-      <span>Trail Brakers Bench — comparing frontier models on the same creative coding brief.</span>
+    <div class="wrap">
+      <span>Trail Brakers Bench — frontier models, one creative brief.</span>
       <span>Built with <a href="https://threejs.org/" rel="noopener">Three.js</a> · <a href="https://github.com/GeorgeQLe/trail-brakers-bench" rel="noopener">Source on GitHub</a></span>
     </div>
   </footer>
