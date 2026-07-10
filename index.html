@@ -73,7 +73,10 @@
       gap: 48px;
       align-items: center;
     }
-    @media (max-width: 840px) { .hero .wrap { grid-template-columns: 1fr; } }
+    @media (max-width: 840px) {
+      .hero .wrap { grid-template-columns: 1fr; }
+      .circuit { width: 100%; max-width: 440px; justify-self: center; }
+    }
 
     .lights { display: flex; gap: 10px; margin-bottom: 26px; }
     .lights i {
@@ -129,20 +132,35 @@
     .hero__meta b { color: var(--text); font-weight: 600; }
 
     /* circuit figure */
-    .circuit { position: relative; }
+    .circuit {
+      position: relative;
+      --lap-duration: 7s;
+      --track-switch-duration: 420ms;
+    }
     .circuit svg { width: 100%; height: auto; display: block; }
+    .circuit__track {
+      opacity: 0;
+      transition: opacity var(--track-switch-duration) ease-in-out;
+    }
+    .circuit__track.is-visible,
+    .circuit__track.is-arriving { opacity: 1; }
     .circuit .track-base { fill: none; stroke: #232329; stroke-width: 14; stroke-linejoin: round; stroke-linecap: round; }
     .circuit .track-edge { fill: none; stroke: #35353e; stroke-width: 1.5; stroke-linejoin: round; }
     .circuit .race-line {
       fill: none; stroke: var(--red); stroke-width: 2.5;
       stroke-linejoin: round; stroke-linecap: round;
-      stroke-dasharray: 90 830;
-      animation: lap 7s linear infinite;
+      stroke-dasharray: 11 89;
+      stroke-dashoffset: 0;
       filter: drop-shadow(0 0 6px rgba(225,6,0,.65));
     }
-    @keyframes lap { to { stroke-dashoffset: -920; } }
+    .circuit__track.is-lapping .race-line {
+      animation: circuit-lap var(--lap-duration) linear 1;
+    }
+    .circuit.is-paused .race-line { animation-play-state: paused; }
+    @keyframes circuit-lap { to { stroke-dashoffset: -100; } }
     .circuit .sf { stroke: var(--text); stroke-width: 3; stroke-dasharray: 3 3; }
     .circuit figcaption {
+      min-height: 1.6em;
       margin-top: 12px;
       font: 500 11px/1.6 var(--mono);
       letter-spacing: .14em; text-transform: uppercase;
@@ -223,7 +241,7 @@
     .s-red    { --sector: var(--red); }
 
     /* ── race control ───────────────────────────────── */
-    .race-control { margin: 72px 0 0; }
+    .race-control { margin: 72px auto 0; }
     .rc-box {
       border: 1px solid rgba(251,191,36,.5);
       background: rgba(251,191,36,.04);
@@ -263,6 +281,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       .ticker__inner, .lights i, .circuit .race-line { animation: none; }
+      .circuit__track { transition: none; }
       .circuit .race-line { stroke-dasharray: none; }
       .card, .card::before { transition: none; }
     }
@@ -308,14 +327,22 @@
         </div>
       </div>
 
-      <figure class="circuit" aria-hidden="true">
+      <figure class="circuit" data-circuit-rotation data-active-track="silverstone" data-phase="loading" aria-hidden="true">
         <svg viewBox="0 0 400 300">
-          <path class="track-base" id="tb" d="M60,240 L250,240 Q290,240 300,210 L310,180 Q315,160 335,155 Q360,148 355,125 L345,95 Q340,75 315,72 L285,70 Q265,68 255,85 Q245,100 228,95 Q210,90 212,72 Q214,55 195,50 L120,38 Q95,34 85,55 L45,150 Q35,175 48,200 L52,215 Q55,240 60,240 Z" />
-          <path class="track-edge" d="M60,240 L250,240 Q290,240 300,210 L310,180 Q315,160 335,155 Q360,148 355,125 L345,95 Q340,75 315,72 L285,70 Q265,68 255,85 Q245,100 228,95 Q210,90 212,72 Q214,55 195,50 L120,38 Q95,34 85,55 L45,150 Q35,175 48,200 L52,215 Q55,240 60,240 Z" />
-          <path class="race-line" pathLength="920" d="M60,240 L250,240 Q290,240 300,210 L310,180 Q315,160 335,155 Q360,148 355,125 L345,95 Q340,75 315,72 L285,70 Q265,68 255,85 Q245,100 228,95 Q210,90 212,72 Q214,55 195,50 L120,38 Q95,34 85,55 L45,150 Q35,175 48,200 L52,215 Q55,240 60,240 Z" />
-          <line class="sf" x1="120" y1="232" x2="120" y2="248" />
+          <g class="circuit__track is-visible" data-layer="0">
+            <path class="track-base" d="M60,240 L250,240 Q290,240 300,210 L310,180 Q315,160 335,155 Q360,148 355,125 L345,95 Q340,75 315,72 L285,70 Q265,68 255,85 Q245,100 228,95 Q210,90 212,72 Q214,55 195,50 L120,38 Q95,34 85,55 L45,150 Q35,175 48,200 L52,215 Q55,240 60,240 Z" />
+            <path class="track-edge" />
+            <path class="race-line" />
+            <line class="sf" />
+          </g>
+          <g class="circuit__track" data-layer="1">
+            <path class="track-base" />
+            <path class="track-edge" />
+            <path class="race-line" />
+            <line class="sf" />
+          </g>
         </svg>
-        <figcaption>Fig. 01 — the racing line, lapping</figcaption>
+        <figcaption data-circuit-caption>Fig. 01 / 02 — Silverstone Circuit · Great Britain · live lap</figcaption>
       </figure>
     </div>
   </header>
@@ -418,5 +445,6 @@
       <span>Built with <a href="https://threejs.org/" rel="noopener">Three.js</a> · <a href="https://github.com/GeorgeQLe/trail-brakers-bench" rel="noopener">Source on GitHub</a></span>
     </div>
   </footer>
+  <script src="./hero-circuits.js"></script>
 </body>
 </html>
