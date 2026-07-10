@@ -1,0 +1,7 @@
+# Model workbench directories (nested git repos, sources of truth live there)
+/grok-4.5/
+/gpt5.6sol/
+
+node_modules/
+.vercel/
+.DS_Store

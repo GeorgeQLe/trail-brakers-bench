@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b1816" />
+    <meta
+      name="description"
+      content="An interactive voxel diorama lap of Circuit de Spa-Francorchamps, rendered in Three.js."
+    />
+    <title>Spa-Francorchamps — Voxel Grand Prix</title>
+    <script type="module" crossorigin src="./assets/index-DLLTTSx9.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BI0yYpXN.css">
+  </head>
+  <body>
+    <main id="app" class="app-shell is-paused">
+      <div
+        id="scene"
+        class="scene"
+        role="img"
+        aria-label="Interactive elevated voxel diorama of Circuit de Spa-Francorchamps in the Ardennes. A red racing car waits on the grid. Drag to orbit and scroll or pinch to zoom."
+      ></div>
+
+      <div id="loading" class="loading-screen" aria-live="polite">
+        <div class="loading-cubes" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <p>Carving the Ardennes</p>
+      </div>
+
+      <div class="edition-mark" aria-hidden="true">
+        <span>01</span>
+        <i></i>
+        <span>ARD</span>
+      </div>
+
+      <header class="brand-panel" aria-label="Experience title">
+        <p class="eyebrow"><span class="eyebrow-mark"></span> Voxel Grand Prix · Belgium</p>
+        <h1>Spa</h1>
+        <p class="circuit-name">Circuit de Spa-Francorchamps</p>
+        <div class="status-row">
+          <span id="status-chip" class="status-chip">
+            <span class="status-indicator" aria-hidden="true"></span>
+            <span id="status-label">Ready on grid</span>
+          </span>
+          <span class="round-label">Ardennes · 2026</span>
+        </div>
+      </header>
+
+      <aside class="circuit-card" aria-label="Circuit information">
+        <div class="circuit-card__header">
+          <span>Stavelot, Belgium</span>
+          <span class="belgian-flag" role="img" aria-label="Belgian flag"></span>
+        </div>
+        <div class="circuit-stats">
+          <div><strong>7.004</strong><span>KM</span></div>
+          <div><strong>19</strong><span>TURNS</span></div>
+          <div><strong>~100</strong><span>METRES</span></div>
+        </div>
+        <div class="elevation-profile" aria-label="Stylized circuit elevation profile">
+          <span class="elevation-line" aria-hidden="true"></span>
+          <div><small>LOW</small><b>ARDENNES ELEVATION</b><small>HIGH</small></div>
+        </div>
+      </aside>
+
+      <section class="telemetry" aria-label="Live lap telemetry">
+        <div class="telemetry__meta">
+          <span id="lap-label">Lap 01</span>
+          <time id="time-label" datetime="PT0S">00:00.000</time>
+        </div>
+        <div class="telemetry__focus">
+          <div>
+            <span class="telemetry-kicker">Now approaching</span>
+            <strong id="corner-label">Start / Finish</strong>
+          </div>
+          <div class="speed-readout">
+            <strong id="speed-label">000</strong>
+            <span>KM/H</span>
+          </div>
+        </div>
+        <div
+          id="progress-track"
+          class="progress-track"
+          role="progressbar"
+          aria-label="Lap progress"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+        >
+          <span id="progress-fill"></span>
+          <i id="progress-marker"></i>
+          <b class="sector-tick sector-tick--one"></b>
+          <b class="sector-tick sector-tick--two"></b>
+        </div>
+        <div class="telemetry__detail">
+          <span id="sector-label">Sector 1</span>
+          <span id="progress-label">0.0%</span>
+          <span id="elevation-label">Grid · 386 m</span>
+        </div>
+      </section>
+
+      <div class="orbit-hint" aria-hidden="true">
+        <span class="orbit-icon"><i></i><i></i><i></i></span>
+        <span><strong>Drag</strong> to orbit<br /><strong>Scroll</strong> to zoom</span>
+      </div>
+
+      <div class="scene-note" aria-hidden="true">
+        <span>Elevation</span>
+        <strong>×1.8</strong>
+        <i></i>
+        <span>Fixed seed 07</span>
+      </div>
+
+      <nav class="control-deck" aria-label="Lap playback and camera controls">
+        <button id="restart-button" class="control-button" type="button" data-testid="restart">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 4v6h6M5.7 15.5a7.1 7.1 0 1 0 .2-7.3L4 10" />
+          </svg>
+          <span>Restart</span>
+          <kbd>R</kbd>
+        </button>
+
+        <button
+          id="play-button"
+          class="control-button control-button--primary"
+          type="button"
+          data-testid="play-pause"
+          aria-label="Play lap"
+          aria-pressed="false"
+        >
+          <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M8 5v14M16 5v14" />
+          </svg>
+          <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m8 5 11 7-11 7Z" />
+          </svg>
+          <span id="play-label">Play lap</span>
+          <kbd>Space</kbd>
+        </button>
+
+        <button id="camera-button" class="control-button" type="button" data-testid="reset-camera">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 9V5h4M20 9V5h-4M4 15v4h4M20 15v4h-4M8 12h8" />
+          </svg>
+          <span>Reset view</span>
+          <kbd>V</kbd>
+        </button>
+      </nav>
+
+      <p id="live-status" class="sr-only" aria-live="polite">
+        Spa lap ready. Press Play to begin. The camera is available while paused.
+      </p>
+      <p class="sr-only">
+        Playback begins only when requested. Restart returns the car and timer to the grid and keeps
+        the lap paused. Camera rotation and zoom remain available in every playback state.
+      </p>
+      <noscript>This experience requires JavaScript and WebGL.</noscript>
+    </main>
+
+  </body>
+</html>

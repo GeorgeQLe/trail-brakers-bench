@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Trail Brakers — two Three.js Silverstone GP demos: voxel and classic 3D. Same circuit, two visual languages."
+    />
+    <title>Trail Brakers — Silverstone Showcase</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow--red" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow--blue" aria-hidden="true"></div>
+
+    <aside class="grok-banner" role="note">
+      <p>
+        Made with
+        <strong>Grok&nbsp;4.5</strong>
+        by
+        <a href="https://x.ai" rel="noopener noreferrer" target="_blank">xAI</a>
+      </p>
+    </aside>
+
+    <header class="site-header">
+      <div class="brand">
+        <span class="brand-mark">TB</span>
+        <div class="brand-text">
+          <p class="brand-kicker">Interactive demos</p>
+          <h1>Trail Brakers</h1>
+        </div>
+      </div>
+      <p class="header-tagline">One circuit. Two engines of style.</p>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow">Silverstone Circuit · Grand Prix layout</p>
+        <h2 class="hero-title">
+          From
+          <span class="accent-red">one-shot seed</span>
+          to
+          <span class="accent-blue">iterated demos</span>
+        </h2>
+        <p class="hero-lede">
+          Start with the exact code from the initial Grok&nbsp;4.5 seed prompt
+          (simplified circuit, play / pause / restart, orbit camera), then compare
+          the multi-step refinements — OpenStreetMap centerline, scenery, and a
+          classic 3D sibling.
+        </p>
+      </section>
+
+      <section class="oneshot" id="oneshot" aria-labelledby="oneshot-heading">
+        <div class="section-heading">
+          <p class="eyebrow">Prompt 01 · Seed only</p>
+          <h2 id="oneshot-heading">One-shot</h2>
+          <p class="section-lede">
+            Restored from the first session snapshot — before OSM digitization,
+            barrier experiments, or packaging. Single user prompt:
+          </p>
+          <blockquote class="seed-quote">
+            generate using three.js a voxel-style scene of an F1 car driving
+            around a 3D representation of Silverstone circuit. The user should be
+            able to play, pause, and restart the animation as well as rotate the
+            map to look at the circuit and car from different angles.
+          </blockquote>
+        </div>
+
+        <div class="showcase showcase--oneshot" aria-label="One-shot demos">
+          <article class="card card--oneshot">
+            <div class="card-visual" aria-hidden="true">
+              <div class="voxel-preview">
+                <span class="block b1"></span>
+                <span class="block b2"></span>
+                <span class="block b3"></span>
+                <span class="block b4"></span>
+                <span class="block b5"></span>
+                <span class="block b6"></span>
+                <span class="block b7"></span>
+              </div>
+              <span class="oneshot-badge">Seed snapshot</span>
+            </div>
+            <div class="card-body">
+              <p class="card-label">One-shot · Voxel</p>
+              <h3>Initial Silverstone scene</h3>
+              <p class="card-desc">
+                Hand-drawn simplified centerline, instanced box asphalt, voxel F1
+                car, lap timer, and orbit controls — the direct product of the seed
+                prompt (plus a tiny play-button wiring fix so Play actually works).
+              </p>
+              <ul class="feature-list">
+                <li>Simplified (non-OSM) track path</li>
+                <li>Voxel track + car, Lambert materials</li>
+                <li>Play / pause / restart + orbit camera</li>
+                <li>Corner name HUD + lap timer</li>
+              </ul>
+              <a class="cta cta--oneshot" href="./oneshot/">
+                Launch one-shot demo
+                <span class="cta-arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="iterated" id="iterated" aria-labelledby="iterated-heading">
+        <div class="section-heading">
+          <p class="eyebrow">Prompts 03–16 · Research &amp; package</p>
+          <h2 id="iterated-heading">Iterated demos</h2>
+          <p class="section-lede">
+            After OSM research, scenery placement, follow cam, packaging, and the
+            classic 3D sibling — the polished pair that shares a ~5.86&nbsp;km
+            digitized GP centerline.
+          </p>
+        </div>
+
+        <div class="showcase" aria-label="Iterated project showcase">
+          <article class="card card--voxel">
+            <div class="card-visual" aria-hidden="true">
+              <div class="voxel-preview">
+                <span class="block b1"></span>
+                <span class="block b2"></span>
+                <span class="block b3"></span>
+                <span class="block b4"></span>
+                <span class="block b5"></span>
+                <span class="block b6"></span>
+                <span class="block b7"></span>
+              </div>
+            </div>
+            <div class="card-body">
+              <p class="card-label">Iterated · Style A</p>
+              <h3>Voxel Trail Brakers</h3>
+              <p class="card-desc">
+                Blocky asphalt track and open-wheel F1 car built from instanced boxes.
+                Flat Lambert materials, chunky kerbs, and a playful low-poly garage feel.
+              </p>
+              <ul class="feature-list">
+                <li>OSM-accurate voxel track mesh</li>
+                <li>Voxel F1 car (wings, halo, sidepods)</li>
+                <li>Orbit camera + play / pause / restart</li>
+                <li>Live corner names &amp; lap timer</li>
+              </ul>
+              <a class="cta cta--red" href="./voxel/">
+                Launch voxel demo
+                <span class="cta-arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="card card--classic">
+            <div class="card-visual" aria-hidden="true">
+              <div class="classic-preview">
+                <div class="ribbon"></div>
+                <div class="car-shape"></div>
+                <div class="horizon"></div>
+              </div>
+            </div>
+            <div class="card-body">
+              <p class="card-label">Iterated · Style B</p>
+              <h3>Trail Brakers 3D</h3>
+              <p class="card-desc">
+                Continuous asphalt ribbon, PBR-style materials, gravel run-off, kerbs,
+                pits, and grandstands — plus a follow cam for a third-person chase.
+              </p>
+              <ul class="feature-list">
+                <li>Smooth ribbon track mesh</li>
+                <li>Polygonal F1 car + Standard materials</li>
+                <li>Follow cam (<kbd>F</kbd>) and free orbit</li>
+                <li>Section-accurate run-off &amp; scenery</li>
+              </ul>
+              <a class="cta cta--blue" href="./3d/">
+                Launch 3D demo
+                <span class="cta-arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="compare">
+        <h2>Side by side</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Aspect</th>
+                <th scope="col">Voxel</th>
+                <th scope="col">Classic 3D</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Track</th>
+                <td>Instanced box voxels</td>
+                <td>Continuous ribbon mesh</td>
+              </tr>
+              <tr>
+                <th scope="row">Car</th>
+                <td>Box-built voxel F1</td>
+                <td>Smooth cylinders / boxes</td>
+              </tr>
+              <tr>
+                <th scope="row">Materials</th>
+                <td>Lambert, flat colors</td>
+                <td>Standard (roughness / metalness)</td>
+              </tr>
+              <tr>
+                <th scope="row">Path data</th>
+                <td colspan="2">Shared Silverstone OSM centerline</td>
+              </tr>
+              <tr>
+                <th scope="row">Stack</th>
+                <td colspan="2">Three.js · Vite · vanilla JS</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="prompts" id="prompts" aria-labelledby="prompts-heading">
+        <div class="prompts-header">
+          <p class="eyebrow">How it was built</p>
+          <h2 id="prompts-heading">Prompts</h2>
+          <p class="prompts-lede">
+            Session prompts that shaped Trail Brakers with
+            <strong>Grok&nbsp;4.5</strong> — from the seed voxel scene through
+            Silverstone accuracy, barriers, the classic 3D sibling, and this
+            showcase landing page.
+          </p>
+        </div>
+
+        <ol class="prompt-list">
+          <li class="prompt-item prompt-item--seed">
+            <div class="prompt-meta">
+              <span class="prompt-step">01</span>
+              <span class="prompt-tag">Seed</span>
+              <time datetime="2026-07-10T00:53:00Z">00:53</time>
+            </div>
+            <blockquote class="prompt-quote">
+              generate using three.js a voxel-style scene of an F1 car driving
+              around a 3D representation of Silverstone circuit. The user should
+              be able to play, pause, and restart the animation as well as
+              rotate the map to look at the circuit and car from different
+              angles.
+            </blockquote>
+          </li>
+
+          <li class="prompt-item">
+            <div class="prompt-meta">
+              <span class="prompt-step">02</span>
+              <span class="prompt-tag">Fix</span>
+              <time datetime="2026-07-10T00:56:00Z">00:56</time>
+            </div>
+            <blockquote class="prompt-quote">
+              I hit play but nothing happened
+            </blockquote>
+          </li>
+
+          <li class="prompt-item">
+            <div class="prompt-meta">
+              <span class="prompt-step">03</span>
+              <span class="prompt-tag">Layout</span>
+              <time datetime="2026-07-10T00:59:00Z">00:59</time>
+            </div>
+            <blockquote class="prompt-quote">
+              the basic functionality of the game work though it does not look
+              like the actual silverstone circuit. Can you research and look up
+              the real silverstone and model it accurately?
+            </blockquote>
+          </li>
+
+          <li class="prompt-item">
+            <div class="prompt-meta">
+              <span class="prompt-step">04</span>
+              <span class="prompt-tag">Scenery</span>
+              <time datetime="2026-07-10T01:04:00Z">01:04</time>
+            </div>
+            <blockquote class="prompt-quote">
+              can you ensure the building and the grandstands are in their
+              proper location? Also mark the corners with their names and T
+              numbers?
+            </blockquote>
+          </li>
+
+          <li class="prompt-item">
+            <div class="prompt-meta">
+              <span class="prompt-step">05</span>
+              <span class="prompt-tag">Detail</span>
+              <time datetime="2026-07-10T01:09:00Z">01:09</time>
+            </div>
+            <blockquote class="prompt-quote">
+              I think we should make the turn labels taller. Also the
+              grandstands look like they're oriented the wrong way. Can you do
+              some research on what the buildings look like and how we can model
+              them accurately? Also there are some missing patches in the road
+              that needs to be filled in?
+            </blockquote>
+          </li>
+
+          <li class="prompt-item">
+            <div class="prompt-meta">
+              <span class="prompt-step">06</span>
+              <span class="prompt-tag">Map</span>
+              <time datetime="2026-07-10T01:12:00Z">01:12</time>
+            </div>
+            <blockquote class="prompt-quote">
+              can you expand the grass around the track? Some of the stands are
+              going off map
+            </blockquote>
+          </li>
+
+          <li class="prompt-item">
+            <div class="prompt-meta">
+              <span class="prompt-step">07</span>
+              <span class="prompt-tag">Camera</span>
+              <time datetime="2026-07-10T01:14:00Z">01:14</time>
+            </div>
+            <blockquote class="prompt-quote">
+              can you have a follow car button which will follow the car from a
+              3rd person perspective from behind?
+            </blockquote>
+          </li>
+
+          <li class="prompt-item">
+            <div class="prompt-meta">
+              <span class="prompt-step">08</span>
+              <span class="prompt-tag">Safety</span>
+              <time datetime="2026-07-10T01:17:00Z">01:17</time>
+            </div>
+            <blockquote class="prompt-quote">
+              there are blue and white blocks around the track, are those
+              supposed to be the walls? Some of them are on the track itself and
+              seem to be randomly placed around the circuit. If they're supposed
+              to be the track walls, can we research the runoff areas, gravel,
+              and walls of silverstone and implement them accurately?
+            </blockquote>
+          </li>
+
+          <li class="prompt-item">
+            <div class="prompt-meta">
+              <span class="prompt-step">09</span>
+              <span class="prompt-tag">Barriers</span>
+              <time datetime="2026-07-10T01:23:00Z">01:23</time>
+            </div>
+            <blockquote class="prompt-quote">
+              There are some issues with the placement of continuous perimeter
+              walls, blue blocks only at TecPro zones at turns 3–5 (which are
+              labeled or placed incorrectly as they appear to go T5–3 in
+              descending order), Turn 6–7 have perimeter walls that don't seem
+              to connect correctly, are on the track, and have random curves.
+              Also on Maggotts and Becketts as well as T16 Vale. Can you check
+              again by researching and consulting with the visual data of
+              Silverstone to correct these mistakes?
+            </blockquote>
+          </li>
+
+          <li class="prompt-item">
+            <div class="prompt-meta">
+              <span class="prompt-step">10</span>
+              <span class="prompt-tag">Barriers</span>
+              <time datetime="2026-07-10T01:31:00Z">01:31</time>
+            </div>
+            <blockquote class="prompt-quote">
+              That did not change anything, perhaps we should take a different
+              approach and attempt to place all of the wall segments manually in
+              their proper location as opposed to using math, because the
+              distances from the walls and the track are not uniform. Some will
+              be closer than others especially at the loop and how close it is
+              to maggotts and becketts. So perhaps we should research the
+              track's barrier locations throughout and then place the barriers
+              in the corresponding locations
+            </blockquote>
+          </li>
+
+          <li class="prompt-item">
+            <div class="prompt-meta">
+              <span class="prompt-step">11</span>
+              <span class="prompt-tag">Cleanup</span>
+              <time datetime="2026-07-10T01:43:00Z">01:43</time>
+            </div>
+            <blockquote class="prompt-quote">
+              I think we are nearly there with the barriers and the tec-pro, we
+              need to verify that they all connect and that we don't have
+              overlays like at T3, T6 on both sides, T9 has a slight gap in the
+              barriers, Maggotts and Becketts towards Aintree and the Loop have
+              barrier overlaps. There's also a triangle barrier overlap by T17
+              Club
+            </blockquote>
+          </li>
+
+          <li class="prompt-item">
+            <div class="prompt-meta">
+              <span class="prompt-step">12</span>
+              <span class="prompt-tag">Scope</span>
+              <time datetime="2026-07-10T01:53:00Z">01:53</time>
+            </div>
+            <blockquote class="prompt-quote">
+              I think the barriers experiment was interesting, however it
+              appears too difficult a problem to solve. Remove the barriers and
+              the tec-pro from the track
+            </blockquote>
+          </li>
+
+          <li class="prompt-item">
+            <div class="prompt-meta">
+              <span class="prompt-step">13</span>
+              <span class="prompt-tag">Sibling</span>
+              <time datetime="2026-07-10T01:57:00Z">01:57</time>
+            </div>
+            <blockquote class="prompt-quote">
+              can you create a separate repo that is a sibling to this one and
+              implement the same silverstone track but in a traditional 3D look?
+            </blockquote>
+          </li>
+
+          <li class="prompt-item">
+            <div class="prompt-meta">
+              <span class="prompt-step">14</span>
+              <span class="prompt-tag">Fix</span>
+              <time datetime="2026-07-10T02:01:00Z">02:01</time>
+            </div>
+            <blockquote class="prompt-quote">
+              it does not seem to be running, can you try again?
+            </blockquote>
+          </li>
+
+          <li class="prompt-item">
+            <div class="prompt-meta">
+              <span class="prompt-step">15</span>
+              <span class="prompt-tag">Package</span>
+              <time datetime="2026-07-10T02:12:00Z">02:12</time>
+            </div>
+            <blockquote class="prompt-quote">
+              for the voxel and 3D versions of trail-brakers that was created,
+              can you package them up in a single git repo (perhaps merge them
+              into the a trail-brakers repo) and create a landing page showcase
+              both projects?
+            </blockquote>
+          </li>
+
+          <li class="prompt-item">
+            <div class="prompt-meta">
+              <span class="prompt-step">16</span>
+              <span class="prompt-tag">Ship</span>
+              <time datetime="2026-07-10T02:21:00Z">02:21</time>
+            </div>
+            <blockquote class="prompt-quote">
+              can you deploy this to vercel after adding a banner at the top of
+              the landing page that this was made with grok 4.5?
+            </blockquote>
+          </li>
+        </ol>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        Trail Brakers · Silverstone showcase demos ·
+        <a href="#oneshot">One-shot</a>
+        ·
+        <a href="#iterated">Iterated</a>
+        ·
+        <a href="#prompts">Build prompts</a>
+        ·
+        <a href="https://threejs.org/" rel="noopener noreferrer" target="_blank">Three.js</a>
+      </p>
+    </footer>
+  </body>
+</html>

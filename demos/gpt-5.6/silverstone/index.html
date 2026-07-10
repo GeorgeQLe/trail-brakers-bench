@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#09111f" />
+    <meta
+      name="description"
+      content="An interactive voxel-style lap of Silverstone, rendered in Three.js."
+    />
+    <title>Silverstone — Voxel Grand Prix</title>
+    <script type="module" crossorigin src="./assets/index-DHP9IezI.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-ChysPXLP.css">
+  </head>
+  <body>
+    <main id="app" class="app-shell">
+      <div
+        id="scene"
+        class="scene"
+        role="img"
+        aria-label="Interactive 3D voxel diorama of Silverstone Circuit with a racing car completing a lap. Drag to rotate and scroll or pinch to zoom."
+      ></div>
+
+      <div id="loading" class="loading-screen" aria-live="polite">
+        <div class="loading-mark" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <p>Building the circuit</p>
+      </div>
+
+      <header class="brand-panel" aria-label="Experience title">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> Voxel Grand Prix</p>
+        <h1>Silverstone</h1>
+        <div class="status-row">
+          <span id="status-chip" class="status-chip">
+            <span class="status-indicator" aria-hidden="true"></span>
+            <span id="status-label">Live lap</span>
+          </span>
+          <span class="round-label">Round 01</span>
+        </div>
+      </header>
+
+      <aside class="circuit-card" aria-label="Circuit information">
+        <div class="circuit-card__header">
+          <span>Great Britain</span>
+          <span class="flag" role="img" aria-label="United Kingdom flag"></span>
+        </div>
+        <div class="circuit-stats">
+          <div><strong>5.891</strong><span>KM</span></div>
+          <div><strong>18</strong><span>TURNS</span></div>
+          <div><strong>3</strong><span>SECTORS</span></div>
+        </div>
+        <p class="circuit-source">
+          <a
+            href="https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_competition_notes_-_circuit_map_pit_lane_drawing_emergency_exits_map_and_red_zone.pdf"
+            target="_blank"
+            rel="noreferrer"
+          >FIA 2026 layout</a>
+          <span aria-hidden="true">·</span>
+          <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">© OpenStreetMap contributors</a>
+        </p>
+      </aside>
+
+      <p class="map-attribution">
+        <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">
+          Map data © OpenStreetMap contributors
+        </a>
+      </p>
+
+      <section class="telemetry" aria-label="Lap telemetry">
+        <div class="telemetry__topline">
+          <span id="lap-label">Lap 01</span>
+          <span id="progress-label">0%</span>
+        </div>
+        <div class="progress-track" aria-hidden="true">
+          <span id="progress-fill"></span>
+          <i id="progress-marker"></i>
+        </div>
+        <div class="telemetry__detail">
+          <span id="sector-label">Sector 1</span>
+          <span class="telemetry-divider"></span>
+          <span id="corner-label">Hamilton Straight</span>
+        </div>
+      </section>
+
+      <div class="orbit-hint" aria-hidden="true">
+        <span class="orbit-icon">
+          <i></i><i></i><i></i>
+        </span>
+        <span><strong>Drag</strong> to orbit · <strong>Scroll</strong> to zoom</span>
+      </div>
+
+      <nav class="control-deck" aria-label="Animation and camera controls">
+        <button id="restart-button" class="control-button" type="button" data-testid="restart">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 4v6h6M5.6 15.5a7.2 7.2 0 1 0 .3-7.4L4 10" />
+          </svg>
+          <span>Restart</span>
+        </button>
+
+        <button
+          id="play-button"
+          class="control-button control-button--primary"
+          type="button"
+          data-testid="play-pause"
+          aria-label="Pause lap"
+        >
+          <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M8 5v14M16 5v14" />
+          </svg>
+          <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m8 5 11 7-11 7Z" />
+          </svg>
+          <span id="play-label">Pause</span>
+        </button>
+
+        <button id="camera-button" class="control-button" type="button" data-testid="reset-camera">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 9V5h4M20 9V5h-4M4 15v4h4M20 15v4h-4M8 12h8" />
+          </svg>
+          <span>Reset view</span>
+        </button>
+      </nav>
+
+      <div class="keyboard-hint" aria-hidden="true">
+        <span><kbd>SPACE</kbd> Play / pause</span>
+        <span><kbd>R</kbd> Restart</span>
+      </div>
+
+      <p id="live-status" class="sr-only" aria-live="polite">Lap animation playing.</p>
+      <p class="sr-only">
+        The circuit is presented as a rotatable 3D diorama. Mouse, touch, and keyboard controls remain
+        available while the lap is paused.
+      </p>
+      <noscript>This experience requires JavaScript and WebGL.</noscript>
+    </main>
+
+  </body>
+</html>

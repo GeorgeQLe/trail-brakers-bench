@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trail Brakers 3D — Silverstone</title>
+    <script type="module" crossorigin src="./assets/index-Q6JbxT2v.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DoM4gLYq.css">
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="canvas"></canvas>
+
+      <header class="hud-top">
+        <div class="title-block">
+          <a class="gallery-link" href="../">← Gallery</a>
+          <h1>TRAIL BRAKERS 3D</h1>
+          <p class="subtitle">Silverstone Circuit · Grand Prix Layout</p>
+        </div>
+        <div class="lap-info">
+          <span class="label">LAP TIME</span>
+          <span id="lap-time" class="value">0:00.00</span>
+        </div>
+      </header>
+
+      <div class="hud-bottom">
+        <div class="controls">
+          <button id="btn-play" type="button" title="Play" aria-label="Play">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            <span>Play</span>
+          </button>
+          <button id="btn-pause" type="button" title="Pause" aria-label="Pause" disabled>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M6 5h4v14H6zm8 0h4v14h-4z" />
+            </svg>
+            <span>Pause</span>
+          </button>
+          <button id="btn-restart" type="button" title="Restart" aria-label="Restart">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path
+                d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"
+              />
+            </svg>
+            <span>Restart</span>
+          </button>
+          <button id="btn-follow" type="button" title="Follow car (3rd person)" aria-label="Follow car" aria-pressed="false">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path
+                d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0 0 13 3.06V1h-2v2.06A8.994 8.994 0 0 0 3.06 11H1v2h2.06A8.994 8.994 0 0 0 11 20.94V23h2v-2.06A8.994 8.994 0 0 0 20.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"
+              />
+            </svg>
+            <span>Follow</span>
+          </button>
+        </div>
+        <p class="hint" id="camera-hint">
+          Drag to orbit · Scroll to zoom · Right-drag to pan
+        </p>
+      </div>
+
+      <div class="corner-label" id="corner-label">Start / Finish</div>
+    </div>
+  </body>
+</html>
