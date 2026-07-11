@@ -155,6 +155,58 @@
     return sampled;
   }
 
+  function perpendicularDistance(point, lineStart, lineEnd) {
+    const dx = lineEnd[0] - lineStart[0];
+    const dy = lineEnd[1] - lineStart[1];
+    const norm = Math.hypot(dx, dy) || Number.EPSILON;
+    return Math.abs(
+      (point[0] - lineStart[0]) * dy - (point[1] - lineStart[1]) * dx,
+    ) / norm;
+  }
+
+  function ramerDouglasPeucker(points, epsilon) {
+    if (points.length < 3) return points;
+    const first = points[0];
+    const last = points[points.length - 1];
+    let maxDist = 0;
+    let maxIndex = 0;
+    for (let index = 1; index < points.length - 1; index += 1) {
+      const dist = perpendicularDistance(points[index], first, last);
+      if (dist > maxDist) {
+        maxDist = dist;
+        maxIndex = index;
+      }
+    }
+    if (maxDist <= epsilon) return [first, last];
+    return ramerDouglasPeucker(points.slice(0, maxIndex + 1), epsilon)
+      .slice(0, -1)
+      .concat(ramerDouglasPeucker(points.slice(maxIndex), epsilon));
+  }
+
+  // Collapse near-collinear runs so the loop stays smooth but keeps far fewer
+  // segments. WebKit (iOS/macOS Safari) mis-renders stroke dashes on closed
+  // polylines with hundreds of tiny segments — the lap dash shows up as
+  // several short lines at once — so keep the fitted loop lean. The loop is
+  // split at start/finish (kept as an anchor) and its farthest point, then
+  // each arc is simplified independently.
+  function simplifyLoop(points, epsilon) {
+    let farIndex = 1;
+    let farDist = 0;
+    for (let index = 1; index < points.length; index += 1) {
+      const dist = distance(points[index], points[0]);
+      if (dist > farDist) {
+        farDist = dist;
+        farIndex = index;
+      }
+    }
+    const arcA = ramerDouglasPeucker(points.slice(0, farIndex + 1), epsilon);
+    const arcB = ramerDouglasPeucker(
+      [...points.slice(farIndex), points[0]],
+      epsilon,
+    );
+    return arcA.slice(0, -1).concat(arcB.slice(0, -1));
+  }
+
   function makePath(circuit) {
     const centerline = circuit.smooth === false ? circuit.points : sampleCurve(circuit.points);
     const projected = centerline.map(([x, z]) =>
@@ -173,7 +225,8 @@
       x * scale + offsetX,
       y * scale + offsetY,
     ]);
-    const coordinates = fitted.map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`);
+    const simplified = simplifyLoop(fitted, 0.1);
+    const coordinates = simplified.map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`);
     return `M${coordinates.join(' L')} Z`;
   }
 
