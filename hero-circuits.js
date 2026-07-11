@@ -204,8 +204,11 @@
     layer.dataset.trackId = circuits[trackIndex].id;
     for (const trackPath of layer.querySelectorAll('path')) {
       trackPath.setAttribute('d', path);
-      trackPath.setAttribute('pathLength', '100');
     }
+    const raceLine = layer.querySelector('.race-line');
+    const trackLength = raceLine.getTotalLength();
+    raceLine.style.setProperty('--lap-dash', `${trackLength * 0.11} ${trackLength * 0.89}`);
+    raceLine.style.setProperty('--lap-offset', `${-trackLength}`);
     placeStartLine(layer);
   }
 

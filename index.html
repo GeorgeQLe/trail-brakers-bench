@@ -175,7 +175,7 @@
     .circuit .race-line {
       fill: none; stroke: var(--red); stroke-width: 2.5;
       stroke-linejoin: round; stroke-linecap: round;
-      stroke-dasharray: 11 89;
+      stroke-dasharray: var(--lap-dash, 11 89);
       stroke-dashoffset: 0;
       filter: drop-shadow(0 0 6px rgba(225,6,0,.65));
     }
@@ -183,7 +183,7 @@
       animation: circuit-lap var(--lap-duration) linear 1;
     }
     .circuit.is-paused .race-line { animation-play-state: paused; }
-    @keyframes circuit-lap { to { stroke-dashoffset: -100; } }
+    @keyframes circuit-lap { to { stroke-dashoffset: var(--lap-offset, -100); } }
     .circuit .sf { stroke: var(--text); stroke-width: 3; stroke-dasharray: 3 3; }
     .circuit figcaption {
       min-height: 1.6em;
