@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Trail Brakers Bench</title>
-  <meta name="description" content="One prompt, multiple frontier models: voxel F1 circuit demos built with Three.js by Grok 4.5 and GPT-5.6, side by side." />
+  <meta name="description" content="One prompt, multiple frontier models: voxel F1 circuit demos built with Three.js by Grok 4.5, GPT-5.6, and Fable 5, side by side." />
 
   <!-- App icons: tabs, bookmarks, iOS home screen, Android/PWA -->
   <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -22,13 +22,13 @@
   <!-- Social / link previews -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Trail Brakers Bench" />
-  <meta property="og:description" content="One prompt, multiple frontier models: voxel F1 circuit demos built with Three.js by Grok 4.5 and GPT-5.6, side by side." />
+  <meta property="og:description" content="One prompt, multiple frontier models: voxel F1 circuit demos built with Three.js by Grok 4.5, GPT-5.6, and Fable 5, side by side." />
   <meta property="og:image" content="/icons/icon-512.png" />
   <meta property="og:image:width" content="512" />
   <meta property="og:image:height" content="512" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Trail Brakers Bench" />
-  <meta name="twitter:description" content="One prompt, multiple frontier models: voxel F1 circuit demos built with Three.js by Grok 4.5 and GPT-5.6, side by side." />
+  <meta name="twitter:description" content="One prompt, multiple frontier models: voxel F1 circuit demos built with Three.js by Grok 4.5, GPT-5.6, and Fable 5, side by side." />
   <meta name="twitter:image" content="/icons/icon-512.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -231,6 +231,7 @@
     }
     #grok { --accent: var(--red); }
     #gpt  { --accent: var(--purple); }
+    #fable { --accent: var(--yellow); }
 
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
     .card {
@@ -261,6 +262,13 @@
       color: var(--text);
     }
     .card .go::after { content: "  ▸"; color: var(--sector, var(--red)); }
+    .card--result { grid-column: 1 / -1; padding: 0; gap: 0; }
+    .card--result::before { z-index: 1; }
+    .card--result img {
+      display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
+      border-bottom: 1px solid var(--line);
+    }
+    .card--result .card__copy { display: grid; gap: 10px; padding: 20px; }
     .s-purple { --sector: var(--purple); }
     .s-green  { --sector: var(--green); }
     .s-yellow { --sector: var(--yellow); }
@@ -319,15 +327,15 @@
     <div class="ticker__inner">
       <span>Trail Brakers Bench</span><span class="dot">●</span>
       <span>One seed prompt</span><span class="dot">●</span>
-      <span>Two frontier models</span><span class="dot">●</span>
-      <span>Six playable demos</span><span class="dot">●</span>
+      <span>Three frontier models</span><span class="dot">●</span>
+      <span>Seven playable demos</span><span class="dot">●</span>
       <span>Silverstone</span><span class="dot">●</span>
       <span>Spa-Francorchamps</span><span class="dot">●</span>
       <span>Three.js · no external assets</span><span class="dot">●</span>
       <span>Trail Brakers Bench</span><span class="dot">●</span>
       <span>One seed prompt</span><span class="dot">●</span>
-      <span>Two frontier models</span><span class="dot">●</span>
-      <span>Six playable demos</span><span class="dot">●</span>
+      <span>Three frontier models</span><span class="dot">●</span>
+      <span>Seven playable demos</span><span class="dot">●</span>
       <span>Silverstone</span><span class="dot">●</span>
       <span>Spa-Francorchamps</span><span class="dot">●</span>
       <span>Three.js · no external assets</span><span class="dot">●</span>
@@ -346,8 +354,8 @@
           Every demo is the model's own work, deployed exactly as built.
         </p>
         <div class="hero__meta">
-          <span>Entrants <b>02</b></span>
-          <span>Demos <b>06</b></span>
+          <span>Entrants <b>03</b></span>
+          <span>Demos <b>07</b></span>
           <span>Circuits <b>Silverstone · Spa</b></span>
           <span>External assets <b>None</b></span>
         </div>
@@ -441,6 +449,33 @@
             <h3>Silverstone</h3>
             <p>The same voxel Grand Prix treatment applied to Silverstone, built against FIA circuit-map and OSM reference geometry.</p>
             <span class="go">Run demo</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="kerb" role="presentation"></div>
+
+    <section class="entry" id="fable">
+      <div class="wrap">
+        <div class="entry__bar">
+          <span class="entry__pos">03</span>
+          <h2>Fable 5</h2>
+          <span class="circuit-tag">Silverstone GP</span>
+          <p class="entry__note">
+            Turned the real Silverstone GPS centreline into a broadcast-ready voxel Grand Prix:
+            curvature-derived pace, a start-light sequence, live timing, and orbit, chase, and TV cameras.
+          </p>
+        </div>
+        <div class="grid">
+          <a class="card card--result s-yellow" href="./demos/fable5/silverstone/">
+            <img src="./demos/fable5/silverstone/result.png" alt="Fable 5 voxel Silverstone Grand Prix demo at sunset with broadcast timing overlays" width="1600" height="900" loading="lazy" />
+            <span class="card__copy">
+              <span class="tag">Result · Silverstone</span>
+              <h3>Voxel Grand Prix</h3>
+              <p>A playable dusk diorama on the real 5.878 km centreline, with a curvature-derived ~1:27 ideal lap and a full broadcast HUD.</p>
+              <span class="go">Run demo</span>
+            </span>
           </a>
         </div>
       </div>

@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voxel Grand Prix — Silverstone · Fable 5</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏎️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #e10600;
+    --carbon: #0d0e12;
+    --glass: rgba(13, 14, 18, 0.78);
+    --line: rgba(255, 255, 255, 0.14);
+    --gold: #d9a93b;
+    --mono: "IBM Plex Mono", ui-monospace, monospace;
+    --disp: "Chakra Petch", system-ui, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; background: #1c2f63; }
+  body { font-family: var(--disp); color: #fff; -webkit-font-smoothing: antialiased; }
+  #scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+  #scene:active { cursor: grabbing; }
+
+  .hud { position: fixed; z-index: 2; user-select: none; }
+
+  /* ---- top-left broadcast banner ---- */
+  #banner { top: 18px; left: 18px; display: flex; flex-direction: column; gap: 6px; }
+  #banner .strip {
+    display: flex; align-items: stretch; overflow: hidden;
+    border-radius: 6px; box-shadow: 0 6px 24px rgba(0,0,0,.35);
+  }
+  #banner .tag {
+    background: var(--red); padding: 8px 12px; font-weight: 700; font-size: 13px;
+    letter-spacing: .14em; display: flex; align-items: center;
+  }
+  #banner .name {
+    background: var(--glass); padding: 8px 16px;
+    font-weight: 700; font-size: 17px; letter-spacing: .1em; display: flex; align-items: center; gap: 10px;
+  }
+  #banner .name small { font-weight: 500; font-size: 11px; letter-spacing: .18em; opacity: .6; }
+  #banner .sub {
+    align-self: flex-start; background: var(--glass);
+    border-radius: 5px; padding: 4px 10px; font-size: 10.5px; letter-spacing: .2em; opacity: .85;
+  }
+  #banner .sub b { color: var(--gold); font-weight: 600; }
+
+  /* ---- corner flash ---- */
+  #corner {
+    top: 96px; left: 18px; background: linear-gradient(90deg, var(--red), #8f0400);
+    padding: 7px 16px; border-radius: 5px; font-weight: 700; font-size: 15px; letter-spacing: .16em;
+    opacity: 0; transform: translateX(-14px); transition: opacity .22s, transform .25s;
+    box-shadow: 0 6px 20px rgba(225, 6, 0, .35);
+  }
+  #corner.show { opacity: 1; transform: none; }
+
+  /* ---- minimap ---- */
+  #mapwrap {
+    top: 18px; right: 18px; background: var(--glass);
+    border: 1px solid var(--line); border-radius: 8px; padding: 8px;
+  }
+  #map { display: block; width: 108px; height: 128px; }
+  #map path { fill: none; stroke: rgba(255,255,255,.55); stroke-width: 2.6; stroke-linejoin: round; }
+  #map .dot { fill: var(--red); stroke: #fff; stroke-width: 1.2; }
+
+  /* ---- timing tower ---- */
+  #tower {
+    bottom: 20px; left: 18px; background: var(--glass);
+    border: 1px solid var(--line); border-radius: 8px; overflow: hidden; min-width: 210px;
+  }
+  #tower .head {
+    background: var(--red); font-size: 11px; font-weight: 700; letter-spacing: .18em;
+    padding: 5px 12px; display: flex; justify-content: space-between; align-items: center;
+  }
+  #tower .head span:last-child { font-family: var(--mono); font-size: 12px; }
+  #tower .rows { padding: 8px 12px 10px; display: grid; grid-template-columns: auto 1fr; gap: 3px 14px; }
+  #tower .k { font-size: 10px; letter-spacing: .18em; opacity: .55; align-self: center; }
+  #tower .v { font-family: var(--mono); font-size: 14px; font-weight: 600; text-align: right; }
+  #tower .v.big { font-size: 18px; color: #fff; }
+  #tower .v.best { color: #b57aff; }
+  #tower .v.ideal { color: var(--gold); font-size: 11px; }
+
+  /* ---- speed / gear ---- */
+  #speedo {
+    bottom: 20px; right: 18px; background: var(--glass);
+    border: 1px solid var(--line); border-radius: 8px; padding: 10px 16px 8px;
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  #speed { font-family: var(--mono); font-size: 34px; font-weight: 600; min-width: 78px; text-align: right; }
+  #speedo .unit { font-size: 10px; letter-spacing: .16em; opacity: .55; }
+  #gearbox { text-align: center; border-left: 1px solid var(--line); padding-left: 12px; }
+  #gear { font-family: var(--mono); font-size: 26px; font-weight: 600; color: var(--gold); }
+  #gearbox .unit { display: block; }
+
+  /* ---- transport controls ---- */
+  #transport {
+    bottom: 20px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .pane {
+    background: var(--glass); border: 1px solid var(--line);
+    border-radius: 8px; display: flex; align-items: center; padding: 5px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.35); gap: 4px;
+  }
+  button {
+    font-family: var(--disp); color: #fff; background: transparent; border: 0; border-radius: 6px;
+    cursor: pointer; transition: background .15s, color .15s;
+  }
+  button:hover { background: rgba(255,255,255,.1); }
+  #btn-play {
+    width: 52px; height: 44px; font-size: 19px; background: var(--red); border-radius: 6px;
+  }
+  #btn-play:hover { background: #ff1a0d; }
+  #btn-restart { width: 44px; height: 44px; font-size: 21px; }
+  .chip { padding: 0 11px; height: 34px; font-size: 12px; font-weight: 600; letter-spacing: .08em; opacity: .65; }
+  .chip.on { background: rgba(255,255,255,.16); opacity: 1; }
+  .lbl { font-size: 9px; letter-spacing: .2em; opacity: .45; padding: 0 4px 0 8px; }
+
+  /* ---- hint ---- */
+  #hint {
+    bottom: 76px; left: 50%; transform: translateX(-50%);
+    font-size: 10.5px; letter-spacing: .22em; opacity: .5; white-space: nowrap;
+    text-shadow: 0 1px 8px rgba(0,0,0,.8);
+    animation: hintfade 1s 7s forwards;
+  }
+  @keyframes hintfade { to { opacity: 0; visibility: hidden; } }
+
+  @media (max-width: 760px) {
+    #mapwrap, #speedo, #hint { display: none; }
+    #banner .name { font-size: 14px; }
+    #tower { min-width: 170px; }
+  }
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas>
+
+<div class="hud" id="banner">
+  <div class="strip">
+    <div class="tag">R12</div>
+    <div class="name">SILVERSTONE <small>VOXEL GRAND PRIX</small></div>
+  </div>
+  <div class="sub">BUILT BY <b>CLAUDE FABLE 5</b> · TRAIL BRAKERS BENCH</div>
+</div>
+
+<div class="hud" id="corner"></div>
+
+<div class="hud" id="mapwrap"><svg id="map" viewBox="0 0 108 128"></svg></div>
+
+<div class="hud" id="tower">
+  <div class="head"><span>LAP</span><span id="lap">—</span></div>
+  <div class="rows">
+    <span class="k">TIME</span><span class="v big" id="time">0:00.000</span>
+    <span class="k">LAST</span><span class="v" id="last">—:——.———</span>
+    <span class="k">BEST</span><span class="v best" id="best">—:——.———</span>
+    <span class="k">IDEAL</span><span class="v ideal" id="ideal">—</span>
+  </div>
+</div>
+
+<div class="hud" id="transport">
+  <div class="pane">
+    <button id="btn-restart" title="Restart (R)">&#8634;</button>
+    <button id="btn-play" title="Pause (Space)">&#10073;&#10073;</button>
+  </div>
+  <div class="pane">
+    <span class="lbl">SPEED</span>
+    <button class="chip on" data-mult="1">1&times;</button>
+    <button class="chip" data-mult="2">2&times;</button>
+    <button class="chip" data-mult="4">4&times;</button>
+  </div>
+  <div class="pane">
+    <span class="lbl">CAM</span>
+    <button class="chip on" data-cam="orbit">ORBIT</button>
+    <button class="chip" data-cam="chase">CHASE</button>
+    <button class="chip" data-cam="tv">TV</button>
+  </div>
+</div>
+
+<div class="hud" id="speedo">
+  <div><span id="speed">0</span> <span class="unit">KM/H</span></div>
+  <div id="gearbox"><span id="gear">N</span><span class="unit">GEAR</span></div>
+</div>
+
+<div class="hud" id="hint">DRAG TO ROTATE &nbsp;·&nbsp; SCROLL TO ZOOM &nbsp;·&nbsp; SPACE PLAY/PAUSE</div>
+
+<script type="module" src="./main.js"></script>
+</body>
+</html>
