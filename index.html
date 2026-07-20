@@ -262,13 +262,13 @@
       color: var(--text);
     }
     .card .go::after { content: "  ▸"; color: var(--sector, var(--red)); }
-    .card--result { grid-column: 1 / -1; padding: 0; gap: 0; }
-    .card--result::before { z-index: 1; }
-    .card--result img {
+    .card--preview { padding: 0; gap: 0; }
+    .card--preview::before { z-index: 1; }
+    .card--preview img {
       display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
       border-bottom: 1px solid var(--line);
     }
-    .card--result .card__copy { display: grid; gap: 10px; padding: 20px; }
+    .card--preview .card__copy { display: grid; gap: 10px; padding: 20px; flex: 1; }
     .s-purple { --sector: var(--purple); }
     .s-green  { --sector: var(--green); }
     .s-yellow { --sector: var(--yellow); }
@@ -395,29 +395,41 @@
           </p>
         </div>
         <div class="grid">
-          <a class="card s-yellow" href="./demos/grok-4.5/oneshot/">
-            <span class="tag">Lap 1 · One-shot</span>
-            <h3>One-shot Voxel</h3>
-            <p>Exact first-response snapshot from the seed prompt. Simplified track layout, play/pause/restart, orbit controls.</p>
-            <span class="go">Run demo</span>
+          <a class="card card--preview s-yellow" href="./demos/grok-4.5/oneshot/">
+            <img src="./screenshots/benchmarks/grok-oneshot.png" alt="Grok 4.5 one-shot voxel circuit benchmark" width="1600" height="900" loading="lazy" />
+            <span class="card__copy">
+              <span class="tag">Lap 1 · One-shot</span>
+              <h3>One-shot Voxel</h3>
+              <p>Exact first-response snapshot from the seed prompt. Simplified track layout, play/pause/restart, orbit controls.</p>
+              <span class="go">Run demo</span>
+            </span>
           </a>
-          <a class="card s-green" href="./demos/grok-4.5/voxel/">
-            <span class="tag">Iterated</span>
-            <h3>Voxel Trail Brakers</h3>
-            <p>Instanced box track and car on the OSM-digitized centerline, with lap timer and live corner names.</p>
-            <span class="go">Run demo</span>
+          <a class="card card--preview s-green" href="./demos/grok-4.5/voxel/">
+            <img src="./screenshots/benchmarks/grok-voxel.png" alt="Grok 4.5 iterated voxel Silverstone benchmark" width="1600" height="900" loading="lazy" />
+            <span class="card__copy">
+              <span class="tag">Iterated</span>
+              <h3>Voxel Trail Brakers</h3>
+              <p>Instanced box track and car on the OSM-digitized centerline, with lap timer and live corner names.</p>
+              <span class="go">Run demo</span>
+            </span>
           </a>
-          <a class="card s-purple" href="./demos/grok-4.5/3d/">
-            <span class="tag">Iterated</span>
-            <h3>Trail Brakers 3D</h3>
-            <p>Smooth ribbon-mesh take on the same track data — standard materials and a follow camera (press F).</p>
-            <span class="go">Run demo</span>
+          <a class="card card--preview s-purple" href="./demos/grok-4.5/3d/">
+            <img src="./screenshots/benchmarks/grok-3d.png" alt="Grok 4.5 smooth ribbon-mesh Silverstone benchmark" width="1600" height="900" loading="lazy" />
+            <span class="card__copy">
+              <span class="tag">Iterated</span>
+              <h3>Trail Brakers 3D</h3>
+              <p>Smooth ribbon-mesh take on the same track data — standard materials and a follow camera (press F).</p>
+              <span class="go">Run demo</span>
+            </span>
           </a>
-          <a class="card s-red" href="./demos/grok-4.5/">
-            <span class="tag">Paddock</span>
-            <h3>Grok's own landing page</h3>
-            <p>The showcase page Grok built for its entry, including the prompts it was given.</p>
-            <span class="go">View page</span>
+          <a class="card card--preview s-red" href="./demos/grok-4.5/">
+            <img src="./screenshots/benchmarks/grok-showcase.png" alt="Grok 4.5 benchmark showcase page" width="1600" height="900" loading="lazy" />
+            <span class="card__copy">
+              <span class="tag">Paddock</span>
+              <h3>Grok's own landing page</h3>
+              <p>The showcase page Grok built for its entry, including the prompts it was given.</p>
+              <span class="go">View page</span>
+            </span>
           </a>
         </div>
       </div>
@@ -438,17 +450,23 @@
           </p>
         </div>
         <div class="grid">
-          <a class="card s-purple" href="./demos/gpt-5.6/spa/">
-            <span class="tag">Circuit 1</span>
-            <h3>Spa-Francorchamps</h3>
-            <p>Elevated closed 3D centreline through the Ardennes — forest, runoff, stream, and named sections, with a stable crimson voxel car.</p>
-            <span class="go">Run demo</span>
+          <a class="card card--preview s-purple" href="./demos/gpt-5.6/spa/">
+            <img src="./screenshots/benchmarks/gpt-spa.png" alt="GPT-5.6 voxel Spa-Francorchamps benchmark" width="1600" height="900" loading="lazy" />
+            <span class="card__copy">
+              <span class="tag">Circuit 1</span>
+              <h3>Spa-Francorchamps</h3>
+              <p>Elevated closed 3D centreline through the Ardennes — forest, runoff, stream, and named sections, with a stable crimson voxel car.</p>
+              <span class="go">Run demo</span>
+            </span>
           </a>
-          <a class="card s-green" href="./demos/gpt-5.6/silverstone/">
-            <span class="tag">Circuit 2</span>
-            <h3>Silverstone</h3>
-            <p>The same voxel Grand Prix treatment applied to Silverstone, built against FIA circuit-map and OSM reference geometry.</p>
-            <span class="go">Run demo</span>
+          <a class="card card--preview s-green" href="./demos/gpt-5.6/silverstone/">
+            <img src="./screenshots/benchmarks/gpt-silverstone.png" alt="GPT-5.6 voxel Silverstone benchmark" width="1600" height="900" loading="lazy" />
+            <span class="card__copy">
+              <span class="tag">Circuit 2</span>
+              <h3>Silverstone</h3>
+              <p>The same voxel Grand Prix treatment applied to Silverstone, built against FIA circuit-map and OSM reference geometry.</p>
+              <span class="go">Run demo</span>
+            </span>
           </a>
         </div>
       </div>
@@ -468,8 +486,8 @@
           </p>
         </div>
         <div class="grid">
-          <a class="card card--result s-yellow" href="./demos/fable5/silverstone/">
-            <img src="./demos/fable5/silverstone/result.png" alt="Fable 5 voxel Silverstone Grand Prix demo at sunset with broadcast timing overlays" width="1600" height="900" loading="lazy" />
+          <a class="card card--preview s-yellow" href="./demos/fable5/silverstone/">
+            <img src="./screenshots/benchmarks/fable-silverstone.png" alt="Fable 5 voxel Silverstone Grand Prix benchmark" width="1600" height="900" loading="lazy" />
             <span class="card__copy">
               <span class="tag">Result · Silverstone</span>
               <h3>Voxel Grand Prix</h3>
